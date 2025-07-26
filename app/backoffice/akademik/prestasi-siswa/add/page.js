@@ -125,7 +125,7 @@ export default function DataGuruAddPage() {
                                         }}
                                     >
                                         <option value="" selected disabled>-- Pilih Kategori Peserta --</option>
-                                        <option value="siswa">Siswa</option>
+                                        <option value="individu">Individu</option>
                                         <option value="tim">Tim</option>
                                     </select>
                                     <FormErrorMessage fontSize="12px" color="red">
@@ -160,37 +160,64 @@ export default function DataGuruAddPage() {
 
                             </VStack>
 
-                            {/* Foto Mahasiswa */}
-                            <FormControl isInvalid={errors.foto} p={'4em'} style={{ borderRadius: '1rem' }} border={'1px solid black'}>
-                                {imagePreview && (
-                                    <Image
-                                        src={imagePreview}
-                                        alt="Preview"
-                                        mt={2}
-                                        boxSize="150px"
-                                        objectFit="cover"
-                                        borderRadius="md"
+                            <VStack width={'1/2'} justify={'start'} align={'start'}>
+                                <FormControl isInvalid={errors.tingkat_lomba} style={{ width: '100%' }}>
+                                    <FormLabel fontWeight="bold">Tingkat Lomba</FormLabel>
+                                    <select
+                                        {...register('tingkat_lomba', { required: 'Tingkat Lomba wajib dipilih' })}
+                                        style={{
+                                            width: '100%',
+                                            padding: '8px',
+                                            border: '1px solid gray',
+                                            borderRadius: '6px',
+                                        }}
+                                    >
+                                        <option value="" selected disabled>-- Pilih Tingkat Lomba --</option>
+                                        <option value="sekolah">Sekolah</option>
+                                        <option value="kecamatan">Kecamatan</option>
+                                        <option value="kabupaten/kota">Kabupaten/Kota</option>
+                                        <option value="provinsi">Provinsi</option>
+                                        <option value="nasional">Nasional</option>
+                                        <option value="internasional">Internasional</option>
+                                    </select>
+                                    <FormErrorMessage fontSize="12px" color="red">
+                                        {errors.tingkat_lomba?.message}
+                                    </FormErrorMessage>
+                                </FormControl>
+
+                                {/* Foto Mahasiswa */}
+                                <FormControl isInvalid={errors.foto} p={'4em'} style={{ borderRadius: '1rem' }} border={'1px solid black'}>
+                                    {imagePreview && (
+                                        <Image
+                                            src={imagePreview}
+                                            alt="Preview"
+                                            mt={2}
+                                            boxSize="150px"
+                                            objectFit="cover"
+                                            borderRadius="md"
+                                        />
+                                    )}
+
+                                    <FormLabel>Foto Juara / Sertifikat</FormLabel>
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        {...register('foto', {
+                                            required: 'Foto Berita wajib diunggah',
+                                            validate: {
+                                                isImage: (files) =>
+                                                    files[0] &&
+                                                    files[0].type.startsWith('image/') ||
+                                                    'File harus berupa gambar',
+                                            },
+                                        })}
                                     />
-                                )}
-
-                                <FormLabel>Foto Juara / Sertifikat</FormLabel>
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    {...register('foto', {
-                                        required: 'Foto Berita wajib diunggah',
-                                        validate: {
-                                            isImage: (files) =>
-                                                files[0] &&
-                                                files[0].type.startsWith('image/') ||
-                                                'File harus berupa gambar',
-                                        },
-                                    })}
-                                />
-                                <FormErrorMessage fontSize={'12px'} color={'red'}>{errors.foto?.message}</FormErrorMessage>
+                                    <FormErrorMessage fontSize={'12px'} color={'red'}>{errors.foto?.message}</FormErrorMessage>
 
 
-                            </FormControl>
+                                </FormControl>
+                            </VStack>
+
                         </HStack>
 
                         <NavigationButton

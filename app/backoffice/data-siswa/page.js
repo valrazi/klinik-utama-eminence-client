@@ -80,7 +80,21 @@ export default function BackofficeDataSiswaPage() {
                             </Flex>
                         </Table.Cell>
                     )
-                    : null
+                    : (
+                        <Table.Cell textAlign="center">
+                            <Flex justify="center" gap="4" justifyContent={'center'}>
+                                <NavigationButton
+                                    onClick={() => {
+                                        router.push('/backoffice/data-siswa/edit/' + item.id)
+                                    }}
+                                    backgroundColor={'yellow'}
+                                    color={'black'}
+                                    label="Kelola"
+                                />
+                            </Flex>
+                        </Table.Cell>
+                    )
+
             }
         </Table.Row>
     );

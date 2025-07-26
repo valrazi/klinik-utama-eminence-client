@@ -50,7 +50,7 @@ export default function BackofficePage() {
     const addData = () => {
         router.push('/backoffice/administrasi/alumni-sekolah/add')
     }
-    const headers = ["No", "Nama Lengkap", "NISN", "Status", "Actions"];
+    const headers = ["No", "Nama Lengkap", "NISN", "Status", "Tanggal Dibuat", "Status Terima", "Actions"];
 
     const renderRow = (item, idx) => (
         <Table.Row key={item.id} style={{ borderBottom: '1px solid black' }}>
@@ -59,6 +59,9 @@ export default function BackofficePage() {
             <Table.Cell textAlign="center">{item.nama_lengkap}</Table.Cell>
             <Table.Cell textAlign="center">{item.nisn}</Table.Cell>
             <Table.Cell textAlign="center">{item.status_sekarang}</Table.Cell>
+            <Table.Cell textAlign="center">
+                <span style={{ color: item.status_terima ? 'green' : 'yellow', fontWeight: 'bold' }}>{item.status_terima ? 'Diterima' : 'Tidak / Belum Diterima'}</span>
+            </Table.Cell>
             <Table.Cell textAlign="center">{dayjs(item.tanggal_prestasi).format('dddd, DD MMMM YYYY')}</Table.Cell>
             <Table.Cell textAlign="center">
                 {
@@ -81,7 +84,18 @@ export default function BackofficePage() {
                                 />
                             </Flex>
                         )
-                        : null
+                        : (
+                            <Flex justify="center" gap="4" justifyContent={'center'}>
+                                <NavigationButton
+                                    onClick={() => {
+                                        router.push('/backoffice/administrasi/alumni-sekolah/edit/' + item.id)
+                                    }}
+                                    backgroundColor={'yellow'}
+                                    color={'black'}
+                                    label="Kelola"
+                                />
+                            </Flex>
+                        )
                 }
             </Table.Cell>
         </Table.Row>
