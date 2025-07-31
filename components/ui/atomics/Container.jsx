@@ -7,7 +7,7 @@ export default function Container({
   return (
     <Flex direction="column" flex="1" rounded="xl" w="full" borderWidth="1px" borderColor="black">
       <Flex
-        bg="black"
+        bg="#8B7B25"
         roundedTop="xl"
         justify="center"
         align="center"

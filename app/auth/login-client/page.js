@@ -1,5 +1,5 @@
 "use client"
-import { Box, Container, Flex, Heading, VStack, Input, Button, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, VStack, Input, Button, Text, Span } from "@chakra-ui/react";
 import {
   FormControl,
   FormLabel,
@@ -8,8 +8,9 @@ import {
   FormErrorIcon,
 } from "@chakra-ui/form-control"
 import { useState } from "react";
-import {signIn} from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -26,30 +27,31 @@ export default function LoginPage() {
       return;
     }
 
+    setIsLoading(true)
+
     const res = await signIn('credentials', {
       redirect: false,
       email,
       password
     })
-
-    if(res.error) {
+    setIsLoading(false)
+    if (res.error) {
       setError("Invalid email or password")
     } else {
-      router.push('/backoffice')
+      router.push('/client')
     }
   };
   return (
-    <Box m={'auto'} width={'50%'} display="flex" alignItems="center" justifyContent="center">
-      <Box bg="white" p={8} rounded="xl" shadow="md" border={'1px solid black'} w="full" maxW="sm">
-        <VStack as="form" spacing={8} onSubmit={handleSubmit} width={'full'}>
-          <Heading size="xl" fontWeight={'bold'} borderBottom={'1px solid black'}>Masuk Backoffice</Heading>
+    <Box as="form" onSubmit={handleSubmit} m={'auto'} width={'full'} display="flex" alignItems="center" justifyContent="center" flexDirection={'column'}>
+      <Box bg="white" p={8} mb={'3'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
+        <VStack  spacing={8}  width={'full'}>
           {error && <Text color="red.500">{error}</Text>}
 
           <Box width={'full'}>
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Masukkan email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               w="full"
@@ -62,7 +64,7 @@ export default function LoginPage() {
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Masukkan password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               w="full"
@@ -71,11 +73,14 @@ export default function LoginPage() {
             />
           </Box>
 
-          <Button loading={isLoading} backgroundColor={'black'} color={'white'} onClick={handleSubmit} w="full">
-            Login
-          </Button>
         </VStack>
       </Box>
+      <Box width={'full'} mb={'3'}>
+        <Text>Belum memiliki akun ? <Span color={'#8B7B25'}><Link href={'/auth/register'}>Daftar</Link></Span></Text>
+      </Box>
+      <Button loading={isLoading} backgroundColor={'#8B8A25'} color={'white'} onClick={handleSubmit} w="full" rounded={'lg'}>
+        Login
+      </Button>
     </Box>
   )
 }

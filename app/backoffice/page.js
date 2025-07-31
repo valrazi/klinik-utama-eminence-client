@@ -16,7 +16,7 @@ export default function BackofficePage() {
       router.push("/login");
     } else if (session.user.level !== "superadmin") {
       // Logged in but not superadmin → redirect to /backoffice/data-guru
-      router.push("/backoffice/data-guru");
+      router.push("/backoffice/berita-laporan");
     }
   }, [session, status, router]);
 

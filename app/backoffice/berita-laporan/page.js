@@ -3,11 +3,12 @@ import DebouncedSearchInput from "@/components/ui/atomics/InputSearch";
 import NavigationButton from "@/components/ui/atomics/NavigationButton";
 import TableData from "@/components/ui/atomics/TableData";
 import { showConfirm, showError, showSuccess } from "@/utils/swal";
-import { Button, Flex, Table } from "@chakra-ui/react";
+import { Button, Flex, Heading, Table } from "@chakra-ui/react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {LuPlus} from 'react-icons/lu'
 export default function BackofficePage() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL
     const router = useRouter()
@@ -48,12 +49,19 @@ export default function BackofficePage() {
     const addData = () => {
         router.push('/backoffice/berita-laporan/add')
     }
-    const headers = ["No", "Judul Berita", "Tanggal Upload", "Actions"];
+    const headers = ["No", "Foto Berita", "Judul Berita", "Tanggal Upload", "Actions"];
 
     const renderRow = (item, idx) => (
         <Table.Row key={item.id} style={{borderBottom: '1px solid black'}}>
             <Table.Cell textAlign="center">{idx + 1}</Table.Cell>
-
+            
+            <Table.Cell textAlign="center">
+                <img style={{
+                    width: '60px',
+                    height: '60px',
+                    objectFit: 'cover'
+                }} src={item.foto}/>
+            </Table.Cell>
             <Table.Cell textAlign="center">{item.judul_berita}</Table.Cell>
             <Table.Cell textAlign="center">{dayjs(item.createdAt).format('dddd, DD MMMM YYYY')}</Table.Cell>
             <Table.Cell textAlign="center">
@@ -81,15 +89,24 @@ export default function BackofficePage() {
     }, [])
     return (
         <Flex direction={'column'} gapY={'7'}>
+            <Heading textAlign={'center'} fontSize={'32px'} fontWeight={'bold'} color={'#8B7B25'}>Berita Program</Heading>
             <Flex gapX={'2'}>
-                <DebouncedSearchInput
+                {/* <DebouncedSearchInput
                     onSearch={handleSearch}
                     placeholder="Search users..."
-                    delay={500}  // optional: set custom debounce delay
-                />
+                    delay={500}
+                /> */}
                 <NavigationButton
                     onClick={addData}
-                    label="Tambah Berita" />
+                    backgroundColor="#8B7B25"
+                    label={
+                        (
+                            <Flex gapX={'1'} align={'center'}>
+                                <LuPlus/>
+                                <span>Berita</span>
+                            </Flex>
+                        )
+                    } />
             </Flex>
 
             <TableData

@@ -25,3 +25,10 @@ body {
     text-wrap: balance;
   }
 }
+.swal2-confirm-custom {
+  background-color: #8B7B25 !important; /* Yellow */
+  color: white !important;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 12px;
+}
