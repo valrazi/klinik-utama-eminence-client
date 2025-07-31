@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: 'web-sekolah-fe:5100',
+      name: 'web-zakat-fe:5101',
       script: 'node_modules/next/dist/bin/next',
-      args: 'start -p 5100',
+      args: 'start -p 5101',
     },
   ],
 };
