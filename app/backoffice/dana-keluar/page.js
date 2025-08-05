@@ -99,7 +99,7 @@ export default function BackofficeDataSiswaPage() {
             <Table.Cell textAlign="center">{item.jenis_pengeluaran}</Table.Cell>
             <Table.Cell textAlign="center">
                 {
-                    (item.jenis_pengeluaran == 'Zakat Fitrah Uang' || item.jenis_pengeluaran == 'Infaq')
+                    (item.jenis_pengeluaran == 'Zakat Fitrah Uang' || item.jenis_pengeluaran == 'Infaq' || item.jenis_pengeluaran == 'Zakat Maal')
                         ? `Rp. ${item.nominal_pengeluaran}`
                         : `${item.nominal_pengeluaran} Ltr`
                 }

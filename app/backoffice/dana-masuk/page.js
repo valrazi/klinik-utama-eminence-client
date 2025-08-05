@@ -98,7 +98,7 @@ export default function BackofficePage() {
             <Table.Cell textAlign="center">{item.jenis_pembayaran}</Table.Cell>
             <Table.Cell textAlign="center">
                 {
-                    (item.jenis_pembayaran == 'Zakat Fitrah Uang' || item.jenis_pembayaran == 'Infaq')
+                    (item.jenis_pembayaran == 'Zakat Fitrah Uang' || item.jenis_pembayaran == 'Infaq' || item.jenis_pengeluaran == 'Zakat Maal')
                         ? `Rp. ${item.nominal_pembayaran}`
                         : `${item.nominal_pembayaran} Ltr`
                 }

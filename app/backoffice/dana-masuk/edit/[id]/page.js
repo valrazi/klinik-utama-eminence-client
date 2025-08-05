@@ -149,8 +149,7 @@ export default function DataGuruEditPage() {
 
             <Flex px={'5'} direction={'column'}>
                 <HStack justify={'space-between'}>
-                    <Heading width={'fit'} fontWeight={'bold'} borderBottom={'4px solid yellow'} marginBottom={'30px'}>Prestasi Siswa</Heading>
-
+                   
                     <Flex gapX={'3'}>
                         {
                             !accepted && (

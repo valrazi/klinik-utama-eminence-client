@@ -90,7 +90,7 @@ export default function BackofficePage() {
 
                              <Flex w={'full'} fontSize={'12px'} align={'center'}>
                                 <Text w={'1/3'}>Jumlah</Text>
-                                <Text flex={'1'}>:{(data.jenis_pembayaran == 'Zakat Fitrah Uang' || data.jenis_pembayaran == 'Infaq') ? 'Rp.' : ''}{data.nominal_pembayaran}{(data.jenis_pembayaran != 'Zakat Fitrah Uang' && data.jenis_pembayaran != 'Infaq') ? 'Liter' : ''}</Text>
+                                <Text flex={'1'}>:{(data.jenis_pembayaran == 'Zakat Fitrah Uang' || data.jenis_pembayaran == 'Infaq' || data.jenis_pembayaran == 'Zakat Maal') ? 'Rp.' : ''}{data.nominal_pembayaran}{(data.jenis_pembayaran != 'Zakat Fitrah Uang' && data.jenis_pembayaran != 'Infaq') ? 'Liter' : ''}</Text>
                             </Flex>
                         </Flex>
                     )

@@ -164,7 +164,7 @@ export default function BackofficePage() {
                             <Box width={'full'}>
                                 <FormLabel>Nominal Pembayaran</FormLabel>
                                 {
-                                    jenisPembayaran && (jenisPembayaran == 'Zakat Fitrah Beras' || jenisPembayaran == 'Zakat Maal')
+                                    jenisPembayaran && (jenisPembayaran == 'Zakat Fitrah Beras')
                                         ? (
                                             <Input
                                                 type="text"
@@ -194,7 +194,7 @@ export default function BackofficePage() {
                     </Box>
 
                     {
-                        jenisPembayaran && (jenisPembayaran == 'Zakat Fitrah Beras' || jenisPembayaran == 'Zakat Maal')
+                        jenisPembayaran && (jenisPembayaran == 'Zakat Fitrah Beras')
                             ? (
                                 <Box bg="white" p={8} mb={'4'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
                                     <Heading fontSize={'16px'} fontWeight={'bold'}>Catatan</Heading>
