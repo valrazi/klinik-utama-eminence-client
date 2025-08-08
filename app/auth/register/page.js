@@ -89,10 +89,10 @@ export default function RegisterPage() {
           </Box>
 
           <Box width={'full'}>
-            <FormLabel>No Telepone</FormLabel>
+            <FormLabel>No Telepon</FormLabel>
             <Input
               type="text"
-              placeholder="Masukkan No Telepone"
+              placeholder="Masukkan No Telepon"
               value={noTelpon}
               onChange={(e) => setNoTelpon(e.target.value)}
               w="full"

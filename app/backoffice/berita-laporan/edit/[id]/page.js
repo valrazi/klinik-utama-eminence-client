@@ -125,7 +125,7 @@ export default function DataGuruEditPage() {
     }, [])
 
     return (
-        <Container title={'Tambah Data Guru'}>
+        <Container title={'Kelola Berita'}>
             <Flex justify={'space-between'} align={'center'} pb={'2'} px={'5'}
                 borderBottom={'1px solid black'} marginBottom={'1em'}>
                 <Text>Kelola informasi profil Anda untuk mengontrol, melindungi dan mengamankan akun.</Text>

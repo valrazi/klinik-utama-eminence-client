@@ -164,7 +164,7 @@ export default function BackofficePage() {
 
                 <Box flex={'1'} p={'4'} backgroundColor={'#8B7B25'} rounded={'xl'} color={'white'} fontSize={'16px'} fontWeight={'bold'}  textAlign={'center'}>
                     <Text marginBottom={'4'}>Total Zakat<br></br>Maal</Text>
-                    <Text>{graph.maal} Liter</Text>
+                    <Text>Rp. {graph.maal}</Text>
                 </Box>
 
                 <Box flex={'1'} p={'4'} backgroundColor={'#8B7B25'} rounded={'xl'} color={'white'} fontSize={'16px'} fontWeight={'bold'}  textAlign={'center'}>
@@ -194,7 +194,7 @@ export default function BackofficePage() {
             </Flex>
 
             <TableData
-                title="Prestasi Siwa"
+                title="Dana Masuk"
                 headers={headers}
                 data={teachers}
                 isLoading={loading}
