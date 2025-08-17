@@ -209,7 +209,7 @@ export default function BackofficePage() {
                                     <Flex direction={'column'} width={'full'}>
                                         <Flex width={'full'} justify={'space-between'} align={'center'} borderBottom={'1px solid gray'} pb={'2'} mb={'4'}>
                                             <img src="/img/mandiri.png" />
-                                            <Text>000000000000000</Text>
+                                            <Text textAlign={'center'}>1230007761273<br></br><Text fontSize={'12px'}>an HADIBROTO</Text></Text>
                                             <Button px={'5'} backgroundColor={'#8B8A25'} color={'white'} rounded={'lg'}>
                                                 Salin
                                             </Button>
@@ -217,7 +217,7 @@ export default function BackofficePage() {
 
                                         <Flex width={'full'} justify={'space-between'} align={'center'} pb={'2'}>
                                             <img src="/img/bca.png" />
-                                            <Text>000000000000000</Text>
+                                            <Text textAlign={'center'}>7480368643<br></br><Text fontSize={'12px'}>an HADIBROTO</Text></Text>
                                             <Button px={'5'} backgroundColor={'#8B8A25'} color={'white'} rounded={'lg'}>
                                                 Salin
                                             </Button>

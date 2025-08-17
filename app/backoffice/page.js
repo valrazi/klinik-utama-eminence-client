@@ -13,7 +13,7 @@ export default function BackofficePage() {
 
     if (!session) {
       // Not logged in → redirect to login or wherever
-      router.push("/login");
+      router.push("/auth/login-backoffice");
     } else if (session.user.level !== "superadmin") {
       // Logged in but not superadmin → redirect to /backoffice/data-guru
       router.push("/backoffice/berita-laporan");

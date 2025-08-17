@@ -49,7 +49,7 @@ const handler = NextAuth({
         }
     },
     pages: {
-        signIn: '/auth/login'
+        signIn: '/auth/login-client'
     }
 })
 

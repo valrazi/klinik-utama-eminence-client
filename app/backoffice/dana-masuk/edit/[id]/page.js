@@ -78,8 +78,6 @@ export default function DataGuruEditPage() {
                 if (value.length > 0) {
                     formData.append(key, value[0])
                 }
-            } else if (key == 'nominal_pembayaran') {
-                formData.append(key, Number(value))
             }
             else {
                 formData.append(key, value)
@@ -213,8 +211,10 @@ export default function DataGuruEditPage() {
                                         <FormControl isInvalid={errors.nominal_pembayaran} style={{ width: '100%' }}>
                                             <FormLabel fontWeight={'bold'}>Nominal Pembayaran</FormLabel>
                                             <Input
+                                                value={data.nominal_pembayaran}
                                                 type="number"
-                                                {...register('nominal_pembayaran', { required: 'Nominal Pembayaran' })}
+                                                readOnly
+                                                disabled 
                                                 border="1px solid gray" />
                                             <FormErrorMessage fontSize={'12px'} color={'red'}>{errors.nominal_pembayaran?.message}</FormErrorMessage>
                                         </FormControl>
@@ -253,14 +253,14 @@ export default function DataGuruEditPage() {
                                 </HStack>
                             )
                         }
-
+{/* 
                         <NavigationButton
                             loading={loading ? true : false}
                             backgroundColor="#8B7B25"
                             color="white"
                             type="submit"
                             width={'100px'}
-                            label="Simpan" />
+                            label="Simpan" /> */}
                     </VStack>
                 </form>
             </Flex>

@@ -116,7 +116,7 @@ export default function BackofficePage() {
                                                 marginBottom: '16px'
                                             }} />
                                         <Heading fontWeight={'bold'} fontSize={'10px'} marginBottom={'8px'}>{n.judul_berita}</Heading>
-                                        <Text textAlign={'center'} fontSize={'11px'} marginBottom={'12px'} lineClamp={'1'}>{n.isi_berita}</Text>
+                                        <Text textAlign={'center'} fontSize={'11px'} marginBottom={'12px'} lineClamp={'8'}>{n.isi_berita}</Text>
                                         <Link href={`/client/news-detail/${n.id}`}>
                                             <NavigationButton
                                                 label="Selengkapnya"
