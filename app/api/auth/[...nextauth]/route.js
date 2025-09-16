@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from "axios";
-
+import { getDb } from "@/lib/db";
+import bcrypt from 'bcrypt'
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -12,24 +13,31 @@ const handler = NextAuth({
             },
             async authorize(credentials) {
                 try {
-                    console.log({a:'hit here'});
-                    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-                        email: credentials.email,
-                        password: credentials.password
-                    })
-                    const data = res.data?.data;
+                    const { email, password } = credentials;
 
-                    if (data?.token && data?.user) {
-                        return {
-                            token: data.token,
-                            user: data.user
-                        };
-                    } else {
-                        return null;
-                    }
+                    const db = getDb();
+                    const [rows] = await db.query(
+                        "SELECT * FROM users WHERE email = ? AND is_active = 1 AND role = ? LIMIT 1",
+                        [email, 'patient']
+                    );
+
+                    if (rows.length === 0) return null;
+
+                    const user = rows[0];
+
+                    const validPassword = await bcrypt.compare(password, user.password);
+                    if (!validPassword) return null;
+
+                    return {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                        gender: user.gender,
+                        whatsapp_number: user.whatsapp_number,
+                    };
                 } catch (error) {
-                    console.error('Login Failed', error.response?.data || error.message)
-                    return null
+                    console.log(error);
                 }
             }
         }),
@@ -37,20 +45,22 @@ const handler = NextAuth({
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.accesToken = user.token
-                token.user = user.user
+                token.id = user.id;
+                token.role = user.role;
             }
-            return token
+            return token;
         },
         async session({ session, token }) {
-            session.accesToken = token.accesToken
-            session.user = token.user
-            return session
-        }
+            if (token) {
+                session.user.id = token.id;
+                session.user.role = token.role;
+            }
+            return session;
+        },
     },
     pages: {
-        signIn: '/auth/login-client'
+        signIn: '/auth/login'
     }
 })
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST, handler as authOptions };

@@ -1,22 +1,15 @@
 "use client";
 
-import FooterClient from "@/components/ui/atomics/FooterClient";
-import NavigationButton from "@/components/ui/atomics/NavigationButton";
-import Empty from "@/components/ui/molecules/Empty";
 import { Box, Button, Flex, Heading, Input, Text, VStack } from "@chakra-ui/react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GiRotaryPhone } from "react-icons/gi";
-import { FaArrowCircleLeft } from "react-icons/fa";
 import { FormLabel } from "@chakra-ui/form-control";
 import axios from "axios";
-import { GET } from '@/app/api/auth/[...nextauth]/route'
 
-export default function BackofficePage() {
+export default function ProfilePage() {
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL
-    const { data: session, status, update } = useSession(GET);
+    const { data: session, status, update } = useSession();
     const router = useRouter();
     const [nama, setNama] = useState(null);
     const [jenisKelamin, setJenisKelamin] = useState(null);
@@ -36,23 +29,17 @@ export default function BackofficePage() {
         console.log({ session });
     }, [session, status, router]);
 
-    if (status === "loading") {
-        return <p>Loading...</p>;
-    }
 
     const fetchUser = async () => {
         try {
             setIsLoading(true)
             console.log(session.accesToken);
-            const data = await axios.get(`${API_URL}/auth/me`, {
-                headers: {
-                    Authorization: `Bearer ${session.accesToken}`
-                }
-            })
+            const data = await axios.get(`/api/auth/me`)
             const { user } = data.data
-            setNama(user.nama_lengkap)
-            setJenisKelamin(user.jenis_kelamin)
-            setNoTelpon(user.no_telepon)
+            console.log({user});
+            setNama(user.name)
+            setJenisKelamin(user.gender)
+            setNoTelpon(user.whatsapp_number)
         } catch (error) {
             console.log(error);
             setError(error)
@@ -66,33 +53,18 @@ export default function BackofficePage() {
         e.preventDefault();
 
         // Example: check empty (replace this with your login logic)
-        if (!nama || !jenisKelamin || !noTelpon) {
+        if (!nama || !noTelpon) {
             setError("Lengkapi form terlebih dahulu!");
             return;
         }
 
         try {
             setIsLoading(true)
-            console.log(session.accesToken);
-            await axios.put(`${API_URL}/auth/me`, {
+            await axios.put(`/api/auth/me`, {
                 nama_lengkap: nama,
-                jenis_kelamin: jenisKelamin,
                 no_telepon: noTelpon,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${session.accesToken}`
-                }
             })
             alert('Update informasi berhasil')
-            await update({
-                ...session,
-                user: {
-                    ...session.user,
-                    nama_lengkap: nama,
-                    jenis_kelamin: jenisKelamin,
-                    no_telepon: noTelpon,
-                },
-            });
         } catch (error) {
             console.log(error);
             setError(error)
@@ -105,15 +77,14 @@ export default function BackofficePage() {
 
     const handleLogout = async (e) => {
         await signOut({
-            callbackUrl: '/auth/login-client',
+            callbackUrl: '/auth/login',
         })
     }
 
     return (
         <Flex direction={'column'} width={'full'}>
             <Box as="form" onSubmit={handleSubmit} mt={'8'} width={'full'} display="flex" alignItems="center" justifyContent="center" flexDirection={'column'}>
-                <Box bg="white" p={8} mb={'3'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
-                    <VStack spacing={8} width={'full'}>
+                <VStack spacing={8} width={'full'} my={'4'}>
                         {error && <Text color="red.500">{error}</Text>}
                         <Box width={'full'}>
                             <FormLabel>Nama Lengkap</FormLabel>
@@ -131,6 +102,7 @@ export default function BackofficePage() {
                         <Box width={'full'}>
                             <FormLabel>Jenis Kelamin</FormLabel>
                             <select
+                                disabled
                                 placeholder="Masukkan Jenis Kelamin"
                                 value={jenisKelamin}
                                 onChange={(e) => setJenisKelamin(e.target.value)}
@@ -163,12 +135,11 @@ export default function BackofficePage() {
 
 
                     </VStack>
-                </Box>
-                <Button loading={isLoading} backgroundColor={'#8B8A25'} color={'white'} onClick={handleSubmit} w="full" rounded={'lg'} marginBottom={'4'}>
+                <Button loading={isLoading} backgroundColor={'black'} color={'white'} _hover={{color: 'red'}} onClick={handleSubmit} w="full" rounded={'lg'} marginBottom={'4'}>
                     Edit Profil
                 </Button>
 
-                <Button loading={isLoading} backgroundColor={'red.700'} color={'white'} onClick={handleLogout} w="full" rounded={'lg'}>
+                <Button loading={isLoading} backgroundColor={'red.700'} color={'white'} _hover={{color: 'black'}} onClick={handleLogout} w="full" rounded={'lg'}>
                     Keluar
                 </Button>
             </Box>

@@ -9,9 +9,8 @@ export async function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // If the user is NOT logged in and trying to access /backoffice/*
-  if (!token && (pathname.startsWith("/backoffice") || pathname.startsWith("/client"))) {
-    const isBackoffice = pathname.startsWith("/backoffice")
-    const loginUrl = isBackoffice ? new URL("/auth/login-backoffice", req.url) : new URL("/auth/login-client", req.url);
+  if (!token) {
+    const loginUrl = new URL("/auth/login", req.url);
     return NextResponse.redirect(loginUrl);
   }
 

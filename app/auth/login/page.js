@@ -42,12 +42,15 @@ export default function LoginPage() {
     }
   };
   return (
-    <Box as="form" onSubmit={handleSubmit} m={'auto'} width={'full'} display="flex" alignItems="center" justifyContent="center" flexDirection={'column'}>
-      <Box bg="white" p={8} mb={'3'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
-        <VStack  spacing={8}  width={'full'}>
+    <Box color={'white'} as="form" onSubmit={handleSubmit} m={'auto'} width={'full'} display="flex" alignItems="center" justifyContent="center" flexDirection={'column'}>
+      <Box bg="transparent" p={8} mb={'3'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
+        <Box p={'6'} rounded={'lg'} display={'flex'} justifyContent={'center'} alignContent={'center'}>
+          <img src="/img/logo_large.png" style={{ width: '200px' }} />
+        </Box>
+        <VStack spacing={8} width={'full'}>
           {error && <Text color="red.500">{error}</Text>}
 
-          <Box width={'full'}>
+          <Box width={'full'} color={'white'}>
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
@@ -76,9 +79,9 @@ export default function LoginPage() {
         </VStack>
       </Box>
       <Box width={'full'} mb={'3'}>
-        <Text>Belum memiliki akun ? <Span color={'#8B7B25'}><Link href={'/auth/register'}>Daftar</Link></Span></Text>
+        <Text>Belum memiliki akun ? <Span color={'red.600'}><Link href={'/auth/register'}>Daftar</Link></Span></Text>
       </Box>
-      <Button loading={isLoading} backgroundColor={'#8B8A25'} color={'white'} onClick={handleSubmit} w="full" rounded={'lg'}>
+      <Button loading={isLoading} backgroundColor={'gray.100'} color={'black'} onClick={handleSubmit} w="full" rounded={'lg'}>
         Login
       </Button>
     </Box>

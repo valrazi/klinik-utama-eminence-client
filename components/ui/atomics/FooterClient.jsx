@@ -1,39 +1,66 @@
-import { Flex, Heading, Table, Text } from "@chakra-ui/react";
+"use client";
+
+import { Flex, Icon, Text } from "@chakra-ui/react";
 import Link from "next/link";
-import { GiRotaryPhone } from "react-icons/gi";
+import { FaAlignLeft, FaClockRotateLeft, FaUser } from "react-icons/fa6";
+import { usePathname } from "next/navigation";
 
 export default function FooterClient() {
-    const listNavigation = [
-        {
-            src: '/img/home_logo.png',
-            href: '/client',
-            title: 'Home'
-        },
-        {
-            src: '/img/form_client_logo.png',
-            href: '/client/payment',
-            title: 'Pembayaran'
-        },
-        {
-            src: '/img/profile_logo.png',
-            href: '/client/profile',
-            title: 'Profile'
-        },
-    ]
-    return (
-        <Flex mt={'6'} width={'full'} backgroundColor={'white'} justify={'space-evenly'} p={'4'} align={'center'} border={'2px solid gray'} shadow={'lg'}>
-            {
-                listNavigation.map((n) => {
-                    return (
-                        <Link href={n.href}>
-                            <Flex direction={'column'} align={'center'}>
-                                <img src={n.src}/>
-                                <Text fontWeight={'bold'} fontSize={'12px'}>{n.title}</Text>
-                            </Flex>
-                        </Link>
-                    )
-                })
-            }
-        </Flex>
-    );
+  const pathName = usePathname();
+
+  const listNavigation = [
+    {
+      icon: FaClockRotateLeft,
+      href: "/client/history",
+      title: "History",
+    },
+    {
+      icon: FaAlignLeft,
+      href: "/client",
+      title: "Reservasi",
+    },
+    {
+      icon: FaUser,
+      href: "/client/profile",
+      title: "Profile",
+    },
+  ];
+
+  return (
+    <Flex
+      as="footer"
+      mt="auto"
+      w="full"
+      bg="gray.900"
+      justify="space-around"
+      p={4}
+      align="center"
+      shadow="lg"
+      position="sticky"
+      bottom="0"
+      zIndex="10"
+    >
+      {listNavigation.map((n) => {
+        const isActive = pathName === n.href;
+
+        return (
+          <Link key={n.href} href={n.href}>
+            <Flex
+              direction="column"
+              align="center"
+              gap={2}
+              color={isActive ? "red.500" : "white"} // 👈 active page red
+              _hover={{ color: "red.500" }}
+              transition="color 0.2s ease-in-out"
+            >
+              <Icon as={n.icon} boxSize="6" />
+              <Text fontWeight="bold" fontSize="12px">
+                {n.title}
+              </Text>
+            </Flex>
+          </Link>
+        );
+      })}
+    </Flex>
+  );
 }

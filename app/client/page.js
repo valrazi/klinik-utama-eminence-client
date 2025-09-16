@@ -1,34 +1,85 @@
 "use client";
 
-import FooterClient from "@/components/ui/atomics/FooterClient";
-import NavigationButton from "@/components/ui/atomics/NavigationButton";
+import DialogSubmit from "@/components/ui/molecules/Dialog";
 import Empty from "@/components/ui/molecules/Empty";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import Loading from "@/components/ui/molecules/Loading";
+import { FormLabel } from "@chakra-ui/form-control";
+import { Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
 import axios from "axios";
+import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GiRotaryPhone } from "react-icons/gi";
 
-export default function BackofficePage() {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL
+export default function ClientHomepage() {
+    const today = dayjs().format("YYYY-MM-DD");
+
     const { data: session, status } = useSession();
     const router = useRouter();
-    const [news, setNews] = useState([])
+    const [staffs, setStaffs] = useState([])
+    const [service, setService] = useState()
+    const [staff, setStaff] = useState()
+    const [date, setDate] = useState()
+    const [schedules, setSchedules] = useState([])
+    const [schedule, setSchedule] = useState()
+    const [loading, setLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
-    const fetchNews = async () => {
+    const fetchStaffs = async () => {
         try {
-            const data = await axios.get(`${API_URL}/news-report`, {
+            setLoading(true)
+            const data = await axios.get(`/api/staff`, {
                 params: {
-                    limit: 3
+                    services: service
                 }
             })
-            setNews(data.data.data)
+            console.log(data.data);
+            setStaffs(data.data.staff)
         } catch (error) {
             console.log(error);
-            alert('GET Berita Failed')
+            alert('GET Staff Failed')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const fetchAvailableSchedule = async () => {
+        try {
+            setLoading(true)
+            const data = await axios.get(`/api/schedule`, {
+                params: {
+                    services: service,
+                    staffId: staff,
+                    date
+                }
+            })
+            console.log(data.data);
+            setSchedules(data.data.schedules)
+        } catch (error) {
+            console.log(error);
+            alert('GET Available Schedule Failed')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const submitBookingReservation = async () => {
+        try {
+            setLoading(true)
+            const data = await axios.post(`/api/schedule`, {
+                services: service,
+                staffId: staff,
+                date,
+                schedule,
+            })
+            console.log(data.data);
+            alert('Booking Reservation Sukses')
+            router.push('/client/history')
+        } catch (error) {
+            console.log(error);
+            alert('POST Schedule Failed')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -39,122 +90,179 @@ export default function BackofficePage() {
             // Not logged in → redirect to login or wherever
             router.push("/auth/login-client");
         }
-        fetchNews()
     }, [session, status, router]);
+
+
+    useEffect(() => {
+        if (service) {
+            setStaff(null)
+            fetchStaffs()
+        }
+    }, [service])
+
+    useEffect(() => {
+        if (staff) {
+            setDate(null)
+        }
+    }, [staff])
+
+    useEffect(() => {
+        if (date) {
+            setSchedule(null)
+            fetchAvailableSchedule()
+        }
+    }, [date])
 
     if (status === "loading") {
         return <p>Loading...</p>;
     }
 
-    const listLayanan = [
-        {
-            title: 'Zakat',
-            description: 'Zakat adalah kewajiban untuk membersihkan harta dan membantu sesama.',
-            href: '/client/info-zakat'
-        },
-        {
-            title: 'Infaq',
-            description: 'Infaq adalah bentuk kepedulian sosial yang bisa dilakukan kapan saja.',
-            href: '/client/info-infaq'
-        },
-    ]
 
     return (
         <Flex direction={'column'} width={'full'}>
-            <Flex width={'full'} align={'center'} justify={'center'} direction={'column'} gap={'6'}>
-                <img src="/img/hero_client.png" />
-                <Text fontSize={'14px'} fontWeight={'semibold'}>
-                    Masjid Al Furqon Bekasi menerima dan menyalurkan Zakat dan Infaq Anda secara amanah, tepat sasaran, dan transparan kepada mereka yang benar-benar membutuhkan. Melalui layanan digital ini, kami berkomitmen memudahkan umat dalam menjalankan kewajiban serta berbagi rezeki, kapan saja dan di mana saja.
+            <Loading show={loading} />
+
+            <Flex width={'full'} align={'center'} justify={'center'} direction={'column'}>
+                <Text fontSize={'12px'} color={'gray.500'}>
+                    Form Reservasi Mandiri
                 </Text>
-                <Flex width={'full'} direction={'column'} gap={'4'} backgroundColor={'#8B7B25'} rounded={'xl'} py={'6'} align={'center'} justify={'center'} marginBottom={'6'}>
-                    <Heading fontSize={'18px'} fontWeight={'bold'} color={'white'}>Layanan Kami</Heading>
-                    <Flex gapX={'10'} width={'full'} justifyContent={'center'} align={'center'}>
-                        {
-                            listLayanan.map((l) => {
-                                return (
-                                    <Flex
-                                        maxWidth={'1/3'} align={'center'} justify={'center'} backgroundColor={'white'}
-                                        direction={'column'} p={'2'} rounded={'xl'} border={'2px solid black'}>
-                                        <img
-                                            src="/img/hugeicons_zakat.png"
-                                            style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                marginBottom: '16px'
-                                            }} />
-                                        <Heading fontWeight={'bold'} fontSize={'14px'} marginBottom={'16px'}>{l.title}</Heading>
-                                        <Text textAlign={'center'} fontSize={'11px'} marginBottom={'12px'}>{l.description}</Text>
-                                        <Link href={l.href}>
-                                            <NavigationButton
-                                                label="Selengkapnya"
-                                                backgroundColor="#8B7B25"
-                                            />
-                                        </Link>
-                                    </Flex>
-                                )
-                            })
-                        }
-                    </Flex>
-                </Flex>
-                <Flex width={'full'}>
-                    <Text fontSize={'18px'} fontWeight={'bold'} color={'#8B7B25'}>Berita Program</Text>
+                <Heading fontSize={'24px'} fontWeight={'semibold'}>
+                    Booking Reservasi Anda
+                </Heading>
+
+                <Flex width={'full'} direction={'column'} marginBottom={'4'}>
+                    <FormLabel>Layanan</FormLabel>
+                    <select
+                        placeholder="Layanan"
+                        value={service}
+                        onChange={(e) => setService(e.target.value)}
+                        style={{
+                            width: '100%',
+                            padding: '8px',
+                            border: '2px solid gray',
+                            borderRadius: '6px',
+                        }}>
+
+                        <option value="" selected disabled>Pilih Layanan</option>
+                        <option value={'injury'}>Injury</option>
+                        <option value={'perform'}>Perform</option>
+                        <option value={'massage'}>Massage</option>
+                    </select>
                 </Flex>
 
-                <Flex gapX={'5'} width={'full'} flexWrap={'wrap'}>
-                    {
-                        news.length
-                            ? news.map((n) => {
-                                return (
-                                    <Flex
-                                        maxWidth={'1/4'} align={'center'} justify={'center'} backgroundColor={'white'}
-                                        direction={'column'} p={'2'} rounded={'xl'} border={'2px solid black'}>
-                                        <img
-                                            src={n.foto}
-                                            style={{
-                                                width: '40px',
-                                                height: '40px',
-                                                marginBottom: '16px'
-                                            }} />
-                                        <Heading fontWeight={'bold'} fontSize={'10px'} marginBottom={'8px'}>{n.judul_berita}</Heading>
-                                        <Text textAlign={'center'} fontSize={'11px'} marginBottom={'12px'} lineClamp={'8'}>{n.isi_berita}</Text>
-                                        <Link href={`/client/news-detail/${n.id}`}>
-                                            <NavigationButton
-                                                label="Selengkapnya"
-                                                backgroundColor="#8B7B25"
-                                            />
-                                        </Link>
-                                    </Flex>
-                                )
-                            })
-                            : (
-                                <Empty />
-                            )
-                    }
-                </Flex>
+                {
+                    service && (
+                        <Flex width={'full'} direction={'column'} marginBottom={'4'}>
+                            <FormLabel>
+                                {
+                                    (service && service == 'injury')
+                                        ? 'Daftar Dokter'
+                                        : 'Daftar Terapis'
+                                }
+                            </FormLabel>
+                            <select
+                                placeholder="Staff"
+                                value={staff}
+                                onChange={(e) => setStaff(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '8px',
+                                    border: '2px solid gray',
+                                    borderRadius: '6px',
+                                }}>
 
-                <Flex width={'full'} align={'center'} justify={'center'}>
-                    <Link href={`/client/news`}>
-                        <NavigationButton
-                            label="Lebih Lanjut"
-                            backgroundColor="#8B7B25"
+                                <option value="" selected disabled>Pilih Staff</option>
+                                {
+                                    staffs.map((s) => (
+                                        <option value={s.id} key={s.id}>{s.name}</option>
+                                    ))
+                                }
+                            </select>
+                        </Flex>
+                    )
+                }
+
+                {
+                    staff && (
+                        <Flex width={'full'} direction={'column'} marginBottom={'4'}>
+                            <FormLabel>
+                                Tanggal Reservasi
+                            </FormLabel>
+                            <Input
+                                type="date"
+                                placeholder="Pilih Tanggal"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                w="full"
+                                border={'2px solid gray'}
+                                p={'2'}
+                                min={today}
+                            />
+                        </Flex>
+                    )
+                }
+
+                {
+                    date && (
+                        <Flex width={'full'} direction={'column'} marginBottom={'4'}>
+                            <FormLabel>
+                                Jam Reservasi
+                            </FormLabel>
+                            {
+                                schedules.length
+                                    ? (
+                                        <select
+                                            placeholder="Jam Reservasi"
+                                            value={schedule}
+                                            onChange={(e) => setSchedule(e.target.value)}
+                                            style={{
+                                                width: '100%',
+                                                padding: '8px',
+                                                border: '2px solid gray',
+                                                borderRadius: '6px',
+                                            }}>
+
+                                            <option value="" selected disabled>Pilih Jam</option>
+                                            {
+                                                schedules.map((s) => (
+                                                    <option value={`${s.start_time}-${s.end_time}`} key={s.id}>{`${s.start_time} - ${s.end_time}`}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    )
+                                    : (<Empty />)
+                            }
+                        </Flex>
+                    )
+                }
+
+                {
+                    schedule && (
+                        <DialogSubmit
+                            open={showModal}
+                            setOpen={setShowModal}
+                            titleText={'Submit Reservasi'}
+                            bodyElement={
+                                (
+                                    <Heading>
+                                        Apakah anda yakin ingin melakukan reservasi{" "}
+                                        Layanan <strong>{service.toUpperCase()}</strong>{" "}
+                                        dengan <strong>{staffs.find((s) => s.id == staff).name}</strong>{" "}
+                                        pada tanggal <strong>{date}</strong> dan jam <strong>{schedule}</strong>
+                                    </Heading>
+                                )
+                            }
+                            triggerElement={
+                                (
+                                    <Button backgroundColor={'black'} color={'white'} _hover={{ color: 'red' }} size={'lg'} width={'full'} rounded={'xl'}>Booking Reservasi</Button>
+                                )
+                            }
+                            onSubmit={submitBookingReservation}
                         />
-                    </Link>
-                </Flex>
+                    )
+                }
 
-                <Flex width={'full'} backgroundColor={'#8B7B25'} justify={'space-between'} px={'60px'} py={'20px'} height={'200px'} align={'center'}>
-                    <Flex flex={'1'} direction={'column'} gap={'15px'} justify={'center'} align={'center'}>
-                        <Heading color={'white'} fontWeight={'bold'} fontSize={'14px'}>Informasi Masjid</Heading>
-                        <Text color={'white'} fontSize={'12px'}>Masjid Al Furqon Bekasi<br></br>Bulevar Hijau, Jl. Bulevar<br></br>Hijau Raya, Bekasi, Jawa<br></br>Barat</Text>
-                    </Flex>
 
-                    <Flex flex={'1'} direction={'column'} gap={'15px'} justify={'center'} align={'center'}>
-                        <Heading color={'white'} fontWeight={'bold'} fontSize={'14px'} style={{
-                            transform: 'translate(0, -25px)'
-                        }}>Hubungi Kami</Heading>
-                        <Flex color={'white'} fontSize={'16px'} align={'center'} gapX={'2'}>
-                            <GiRotaryPhone /> <span>0811818665</span></Flex>
-                    </Flex>
-                </Flex>
             </Flex>
         </Flex>
     );

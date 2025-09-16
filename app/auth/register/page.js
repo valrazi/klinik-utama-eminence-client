@@ -1,25 +1,20 @@
 "use client"
-import { Box, Container, Flex, Heading, VStack, Input, Button, Text, Span, Select } from "@chakra-ui/react";
+import { Box, VStack, Input, Button, Text, Span, Switch } from "@chakra-ui/react";
 import {
-  FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  FormErrorIcon,
 } from "@chakra-ui/form-control"
 import { useState } from "react";
-import { signIn } from 'next-auth/react'
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 
 export default function RegisterPage() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL
   const [nama, setNama] = useState(null);
   const [jenisKelamin, setJenisKelamin] = useState(null);
   const [noTelpon, setNoTelpon] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [isExisting, setIsExisting] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -34,26 +29,30 @@ export default function RegisterPage() {
 
     try {
       setIsLoading(true)
-      await axios.post(`${API_URL}/auth/register`, {
-        nama_lengkap: nama,
-        jenis_kelamin: jenisKelamin,
-        no_telepon: noTelpon,
+      await axios.post(`/api/auth/register`, {
+        name: nama,
         email,
-        password
+        whatsapp_number: noTelpon,
+        password,
+        gender: jenisKelamin,
+        existing_patient: isExisting
       })
       alert('Register akun berhasil!')
-      router.push('/auth/login-client')
+      router.push('/auth/login')
     } catch (error) {
       setError(error)
-    }finally {
+    } finally {
       setIsLoading(false)
     }
 
-    
+
   };
   return (
-    <Box as="form" onSubmit={handleSubmit} m={'auto'} width={'full'} display="flex" alignItems="center" justifyContent="center" flexDirection={'column'}>
-      <Box bg="white" p={8} mb={'3'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
+    <Box color={'white'} as="form" onSubmit={handleSubmit} m={'auto'} width={'full'} display="flex" alignItems="center" justifyContent="center" flexDirection={'column'}>
+      <Box bg="transparent" p={8} mb={'3'} rounded="xl" shadow="xl" border={'1px solid gray'} borderColor={'gray'} w="full">
+        <Box p={'6'} rounded={'lg'} display={'flex'} justifyContent={'center'} alignContent={'center'}>
+          <img src="/img/logo_large.png" style={{ width: '200px' }} />
+        </Box>
         <VStack spacing={8} width={'full'}>
           {error && <Text color="red.500">{error}</Text>}
           <Box width={'full'}>
@@ -80,11 +79,12 @@ export default function RegisterPage() {
                 padding: '8px',
                 border: '1px solid gray',
                 borderRadius: '6px',
+                backgroundColor: 'transparent',
               }}>
-                
-              <option value="" selected disabled>Masukkan Jenis Kelamin</option>
-              <option value={'male'}>Laki - Laki</option>
-              <option value={'female'}>Perempuan</option>
+
+              <option value="" selected disabled style={{color: 'gray'}}>Masukkan Jenis Kelamin</option>
+              <option style={{color: 'black'}} value={'male'}>Laki - Laki</option>
+              <option style={{color: 'black'}} value={'female'}>Perempuan</option>
             </select>
           </Box>
 
@@ -127,14 +127,34 @@ export default function RegisterPage() {
             />
           </Box>
 
-
+          <Box width={'full'}>
+            <FormLabel>Status Pelanggan</FormLabel>
+            <Switch.Root
+              checked={isExisting}
+              onCheckedChange={(e) => setIsExisting(e.checked)}
+              colorPalette='red'
+            >
+              <Switch.HiddenInput />
+              <Switch.Control>
+                <Switch.Thumb />
+              </Switch.Control>
+              <Switch.Label>
+                {
+                  isExisting
+                  ? 'Pelanggan Lama'
+                  : 'Pelanggan Baru'
+                }
+              </Switch.Label>
+              <Switch.Label />
+            </Switch.Root>
+          </Box>
 
         </VStack>
       </Box>
       <Box width={'full'} mb={'3'}>
-        <Text>Sudah memiliki akun ? <Span color={'#8B7B25'}><Link href={'/auth/login-client'}>Login</Link></Span></Text>
+        <Text>Sudah memiliki akun ? <Span color={'red'}><Link href={'/auth/login-client'}>Login</Link></Span></Text>
       </Box>
-      <Button loading={isLoading} backgroundColor={'#8B8A25'} color={'white'} onClick={handleSubmit} w="full" rounded={'lg'}>
+      <Button loading={isLoading} backgroundColor={'white'} color={'black'} onClick={handleSubmit} w="full" rounded={'lg'}>
         Register
       </Button>
     </Box>

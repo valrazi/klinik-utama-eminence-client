@@ -1,9 +1,13 @@
-import { Flex, Spinner } from "@chakra-ui/react";
+// components/SpinnerOverlay.jsx
+import React from "react";
+import "./SpinnerOverlay.css"; // import CSS
 
-export default function Loading() {
-    return (
-        <Flex direction={'column'} width={'full'} height={'full'} justify={'center'} align={'center'}>
-            <Spinner />
-        </Flex>
-    )
+export default function Loading({ show }) {
+  if (!show) return null;
+
+  return (
+    <div className="overlay">
+      <div className="spinner"></div>
+    </div>
+  );
 }
