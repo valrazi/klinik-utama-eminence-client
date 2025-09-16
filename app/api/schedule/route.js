@@ -91,7 +91,7 @@ export async function POST(req) {
         }
 
         const [create] = await db.query(
-            `INSERT INTO reservations (patient_id, staff_id, service_id, schedule_date, start_time, end_time, status) ` +
+            `INSERT INTO reservations (patient_id, staff_id, service, schedule_date, start_time, end_time, status) ` +
             `VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [patientId, staffId, services, formattedDate, formattedStartTime, formattedEndTime, "booked"]
         )
@@ -176,16 +176,3 @@ async function getTherapistSchedule(staffId, formattedDate, db) {
     }
 }
 
-
-// id
-// patient_id
-// staff_id
-// service_id
-// schedule_date
-// start_time
-// end_time
-// status
-// reschedule_of
-// reminder_whatsapp_sent_at
-// reminder_whatsapp_sent_status
-// created_at

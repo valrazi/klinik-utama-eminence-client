@@ -79,7 +79,7 @@ export default function ClientHomepage() {
                                                         <Text fontSize="sm" color="gray.500">
                                                             Layanan
                                                         </Text>
-                                                        <Heading size="md" fontWeight={'semibold'}>{r.service_id.toUpperCase()}</Heading>
+                                                        <Heading size="md" fontWeight={'semibold'}>{r.service.toUpperCase()}</Heading>
                                                     </Box>
                                                     <Badge
                                                         backgroundColor={r.status === "booked" ? "green" : "red"}
@@ -108,7 +108,7 @@ export default function ClientHomepage() {
                                                     <Box>
                                                         <Text fontSize="sm" color="gray.500">
                                                             {
-                                                                r.service_id == 'injury'
+                                                                r.service == 'injury'
                                                                 ? 'Dokter'
                                                                 : 'Terapis'
                                                             }
