@@ -30,7 +30,7 @@ export default function AuthLayout({ children }) {
         </Flex>
 
         {/* Sticky Footer */}
-        {!pathName.startsWith("/client/payment-detail") && <FooterClient />}
+        {!pathName.startsWith("/client/receipt") && <FooterClient />}
       </Flex>
     </Flex>
   );

@@ -8,6 +8,7 @@ import { Badge, Box, Button, Card, Flex, Heading, Icon, Input, Stack, Text } fro
 import axios from "axios";
 import dayjs from "dayjs";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCalendarDays, FaClock } from "react-icons/fa6";
@@ -109,8 +110,8 @@ export default function ClientHomepage() {
                                                         <Text fontSize="sm" color="gray.500">
                                                             {
                                                                 r.service == 'injury'
-                                                                ? 'Dokter'
-                                                                : 'Terapis'
+                                                                    ? 'Dokter'
+                                                                    : 'Terapis'
                                                             }
                                                         </Text>
                                                         <Text fontWeight="semibold">{r.staff_name}</Text>
@@ -143,6 +144,18 @@ export default function ClientHomepage() {
                                                                 {r.start_time.slice(0, 5)} - {r.end_time.slice(0, 5)}
                                                             </Text>
                                                         </Flex>
+                                                        <Link href={`/client/receipt/${r.id}`}>
+                                                            <Button
+                                                                my={2}
+                                                                size="sm"
+                                                                px={2}
+                                                                backgroundColor="black"
+                                                                color="white"
+                                                                _hover={{ color: "red" }}
+                                                            >
+                                                                Check Receipt
+                                                            </Button>
+                                                        </Link>
                                                     </Box>
                                                 </Stack>
                                             </Card.Body>
